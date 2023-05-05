@@ -15,7 +15,9 @@ AsyncWebServer server(webServerPort);
 
 // This function will be called when human will try to access undefined endpoint
 void notFound(AsyncWebServerRequest *request) {
-  request->send(404, "text/plain", "Not found");
+  AsyncWebServerResponse *response = request->beginResponse(404, "text/plain", "Not found");
+  response->addHeader("Access-Control-Allow-Origin", "*");
+  request->send(response);
 }
 
 void setup() {
@@ -44,7 +46,9 @@ void setup() {
   // Greet human when it tries to access the root / endpoint.
   // This is a good place to send some documentation about other calls available if you wish.
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/plain", "Hello, world");
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "Hello world!");
+    response->addHeader("Access-Control-Allow-Origin", "*");
+    request->send(request);
   });
 
   // Usage IP_ADDRESS/led?state=1 where /led is our endpoint and ?state=on is a variable definition.
@@ -61,8 +65,10 @@ void setup() {
     }
 
     // Send back message to human
-    String response = "Turning LED ";
-    response += state ? "on" : "off"; 
+    String message = "Turning LED ";
+    message += state ? "on" : "off";
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "Hello world!");
+    response->addHeader("Access-Control-Allow-Origin", "*"); 
     request->send(200, "text/plain", response);
 
     // Operate LED
