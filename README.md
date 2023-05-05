@@ -25,7 +25,7 @@ REST example with a library. [Get it!](WiFi_REST_Lib/WiFi_REST_Lib.ino) You need
 
 This example contains a HTML page that uses [jQuery](https://jquery.com/) and [Bootstrap](https://getbootstrap.com/) libraries to interact with the REST API covered in WiFi REST Lib example. 
 
-### License
+### Licenses
 
 - [jQuery MIT License](https://github.com/jquery/jquery/blob/main/LICENSE.txt)
 - [Bootstrap MIT License](https://github.com/twbs/bootstrap/blob/main/LICENSE)
