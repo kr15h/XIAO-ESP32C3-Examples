@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap REST Demo</title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+
+    <header class="container mt-3">
+        <div id="status-alert" class="alert alert-light" role="alert">
+            API Status: <span id="status-api">Undefined</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1>Hello World!</h1>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="led">LED</div>
+                <button id="button-led" class="btn btn-dark">Toggle LED</button>    
+            </div>
+            <div class="col-sm-6">
+                <h3>Param 1</h3>
+                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                  <div id="param1" class="progress-bar" style="width: 78%"></div>
+                </div>
+                <h3>Param 2</h3>
+                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                  <div id="param2" class="progress-bar" style="width: 50%"></div>
+                </div>
+                <h3>Param 3</h3>
+                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                  <div id="param3" class="progress-bar" style="width: 75%"></div>
+                </div>
+                <h3>Param 3</h3>
+                <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                  <div id="param4" class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    
+    
+
+    <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/jquery/jquery-3.6.4.min.js"></script>
+    <script>
+        function checkAPIStatus(){
+            $.ajax({
+                url: "http://193.167.5.145/",
+                timeout: 5000
+            })
+            .done(function(){
+                $("#status-api").text("Connected");
+                
+                if ( $("#status-alert").hasClass("alert-light") ) {
+                    $("#status-alert").removeClass("alert-light");
+                }
+
+                $("#status-alert").addClass("alert-success");
+            })
+            .fail(function(){
+                $("#status-api").text("Disconnected");
+            });
+        }
+
+        function triggerLED(){
+            $.ajax({
+                url: "http://193.167.5.145/led",
+                data: {
+                    state: $("#led").data("ledState")
+                },
+                timeout: 5000
+            })
+            .done(function(response){
+                const responseJSON = JSON.parse(response); 
+                
+                if (responseJSON.ledState == "on") {
+                    $("#led").data("ledState", "off");
+                    $("#led").css("background", "yellow");
+                } else {
+                    $("#led").data("ledState", "on");
+                    $("#led").css("background", "gray");
+                }
+            })
+            .fail(function(){
+                console.log("LED trigger call failed!");
+            });
+        }
+
+        function getParams(){
+            $.ajax({
+                url: "http://193.167.5.145/params",
+                timeout: 5000
+            })
+            .done(function(response){
+                const responseJSON = JSON.parse(response);
+                console.log(responseJSON);
+
+                $("#param1").css("width", responseJSON.param1.toString() + "%");
+            })
+            .fail(function(){
+                console.log("Sorry, params call failed");
+            });
+        }
+
+        $(document).ready(function(){
+            console.log("Document has loaded!");
+
+            setInterval(checkAPIStatus, 2000);
+            setInterval(getParams, 1000);
+
+            $("#button-led").click(triggerLED);
+        });
+
+
+    </script>
+</body>
+</html>
