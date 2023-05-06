@@ -25,6 +25,10 @@ REST example with a library. [Get it!](WiFi_REST_Lib/WiFi_REST_Lib.ino) You need
 
 This example contains a HTML page that uses [jQuery](https://jquery.com/) and [Bootstrap](https://getbootstrap.com/) libraries to interact with the REST API covered in WiFi REST Lib example. 
 
+## WiFi REST JSON
+
+Currently untested ChatGPT generated example how to use the ArduinoJson library with AsyncWebSrv.
+
 ### Licenses
 
 - [jQuery MIT License](https://github.com/jquery/jquery/blob/main/LICENSE.txt)
